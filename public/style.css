@@ -201,7 +201,6 @@ footer {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .creator-toggle:hover {
-  background: rgba(255,255,255,0.05);
   transform: translateY(-2px);
 }
 .creator-toggle img {
