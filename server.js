@@ -2,13 +2,15 @@ const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Load environment variables from .env file
-dotenv.config();
+// Load .env locally (Vercel uses env vars directly)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Serve static files (HTML, CSS, JS)
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -29,7 +31,12 @@ app.post('/get-key', (req, res) => {
   }
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+// For Vercel serverless: Export the app (don't call app.listen)
+if (process.env.NODE_ENV === 'production') {
+  module.exports = app;
+} else {
+  // Local dev
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}
