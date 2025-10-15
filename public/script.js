@@ -1,13 +1,3 @@
-// Utility: format two digits
-function two(n) {
-  return String(n).padStart(2, '0');
-}
-
-function getHHMM() {
-  const d = new Date();
-  return two(d.getHours()) + two(d.getMinutes());
-}
-
 // Elements
 let pwInput = document.getElementById('pw');
 const pwMsg = document.getElementById('pwMsg');
@@ -152,7 +142,7 @@ resetBtn.addEventListener('click', () => {
     pwContainer.innerHTML = `
       <label for="pw">Password</label>
       <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwHelp" />
-      <div id="pwHelp" class="muted" style="margin-top:8px">Enter the correct password to reveal the key.</div>
+      <div id="pwHelp" class="muted" style="margin-top:8px">Enter the password '1234' to reveal the key.</div>
       <div id="pwMsg" style="margin-top:8px" aria-live="polite"></div>
     `;
     pwInput = document.getElementById('pw');
