@@ -23,11 +23,11 @@
           <p class="muted"><b>1.</b> <b>Open PowerShell</b><br>Click the <b>Start Menu</b>, type <code>PowerShell</code>, then open it.</p>
           <div style="margin-top:10px">
             <p class="muted"><b>2. Copy and paste the code below, then press enter.</b></p>
-            <p2 class="muted" style="list-style-type: circle;"><b>For Windows 8, 10, 11:</b></p2>
+            <p class="muted" style="list-style-type: circle;"><b>For Windows 8, 10, 11:</b></p>
             <input type="text" class="copy-input" value="irm https://get.activated.win | iex" readonly />
-            <p2 class="muted" style="list-style-type: circle;"><b>If the above is blocked (by ISP/DNS), try this (needs updated Windows 10 or 11):</b></p2>
+            <p class="muted" style="list-style-type: circle;"><b>If the above is blocked (by ISP/DNS), try this (needs updated Windows 10 or 11):</b></p>
             <input type="text" class="copy-input" value="iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://get.activated.win | Out-String)" readonly />
-            <p2 class="muted" style="list-style-type: circle;"><b>For Windows 7 and later:</b></p2>
+            <p class="muted" style="list-style-type: circle;"><b>For Windows 7 and later:</b></p>
             <input type="text" class="copy-input" value="iex ((New-Object Net.WebClient).DownloadString('https://get.activated.win'))" readonly />
             <p class="muted"><b>3. The activation menu will appear. Choose the green-highlighted options to activate Windows or Office.</b></p>
             <p class="muted"><b>2. Done!</b></p>
@@ -76,7 +76,7 @@
           <textarea id="comments" rows="3" placeholder="Tell us what worked or failed..."></textarea>
           <div style="display:flex;gap:8px;margin-top:8px">
             <a id="sendFb" class="btn-primary">Send Feedback</a>
-            <a herf="https://window-activate.vercel.app/get-feedback/?secret=11500" target="_blank" class="btn-ghost">View Feedbacks</a>
+            <a href="https://window-activate.vercel.app/get-feedback/?secret=11500" target="_blank" class="btn-ghost">View Feedbacks</a>
           </div>
         </div>
       </section>
