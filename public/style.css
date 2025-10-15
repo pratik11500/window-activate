@@ -202,6 +202,7 @@ footer {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .creator-toggle:hover {
+  background: rgba(255,255,255,0.05);
   transform: translateY(-2px);
 }
 .creator-toggle img {
@@ -213,8 +214,8 @@ footer {
 
 @media (max-width: 820px) {
   .logo {
-  width: 130px;
-  height: 55px;
+    width: 130px;
+    height: 55px;
   }
   .card {
     padding: 18px;
