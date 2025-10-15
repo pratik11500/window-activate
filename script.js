@@ -1,3 +1,8 @@
+// Simulated environment variable (in a real app, this would come from a secure source)
+const ENV = {
+  ACTIVATION_KEY: 'K2JNR-XMD8C-M3QCC-CR8F2-P9XTY'
+};
+
 // Utility: format two digits
 function two(n) {
   return String(n).padStart(2, '0');
@@ -84,11 +89,10 @@ function checkPasswordNow() {
   
   const now = getHHMM();
   if (pwInput.value === now) {
-    const token = makeDemoKey();
+    const token = ENV.ACTIVATION_KEY; // Use simulated env variable
     const keyElement = document.createElement('div');
     keyElement.className = 'key';
-    keyElement.dataset.key = token; // Store key in data attribute
-    keyElement.textContent = '••••-••••-••••-••••'; // Masked display
+    keyElement.textContent = token; // Display key in plain text
     keyElement.title = 'Click to copy key';
     pwContainer.innerHTML = '';
     pwContainer.appendChild(keyElement);
@@ -96,7 +100,7 @@ function checkPasswordNow() {
     actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
     pwInput = null;
 
-    // Add click to copy functionality
+    // Copy functionality
     keyElement.addEventListener('click', () => {
       navigator.clipboard.writeText(token).then(() => {
         const notification = document.createElement('div');
@@ -126,13 +130,6 @@ if (pwInput) {
       checkPasswordNow();
     }
   });
-}
-
-// Generate demo key
-function makeDemoKey() {
-  const arr = new Uint8Array(8);
-  crypto.getRandomValues(arr);
-  return Array.from(arr).map(b => ('0' + b.toString(16)).slice(-2)).join('').toUpperCase().match(/.{1,4}/g).join('-');
 }
 
 activateBtn.addEventListener('click', () => {
