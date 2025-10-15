@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
-const fs = require('fs').promises; // Use promises API for async file operations
 
 // Load .env locally (Vercel uses env vars directly)
 if (process.env.NODE_ENV !== 'production') {
@@ -10,6 +9,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// In-memory feedback storage (for Vercel demo; use a DB in production)
+let feedbackData = [];
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,8 +29,8 @@ app.post('/get-key', (req, res) => {
   }
 });
 
-// API endpoint to send feedback (stored in feedback.json)
-app.post('/send-feedback', async (req, res) => {
+// API endpoint to send feedback (in-memory for demo)
+app.post('/send-feedback', (req, res) => {
   const { comment } = req.body;
   if (!comment || comment.trim() === '') {
     return res.status(400).json({ error: 'Comment is required' });
@@ -38,23 +40,13 @@ app.post('/send-feedback', async (req, res) => {
     const timestamp = new Date().toISOString();
     const feedbackEntry = { timestamp, comment };
 
-    // Read existing feedback or initialize empty array
-    let feedbackData = [];
-    try {
-      const fileContent = await fs.readFile('feedback.json', 'utf8');
-      feedbackData = JSON.parse(fileContent);
-      if (!Array.isArray(feedbackData)) feedbackData = [];
-    } catch (e) {
-      // File doesn't exist yet, proceed with empty array
-    }
-
-    // Append new feedback
+    // Add to in-memory array
     feedbackData.push(feedbackEntry);
-    await fs.writeFile('feedback.json', JSON.stringify(feedbackData, null, 2));
+    console.log('Feedback saved:', feedbackEntry); // Log for debugging
 
     res.json({ success: true, message: 'Feedback saved' });
   } catch (error) {
-    console.error('Error saving feedback:', error);
+    console.error('Error processing feedback:', error);
     res.status(500).json({ error: 'Failed to save feedback' });
   }
 });
@@ -66,12 +58,7 @@ app.get('/get-feedback', (req, res) => {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  try {
-    const feedbackData = JSON.parse(fs.readFileSync('feedback.json', 'utf8') || '[]');
-    res.json(feedbackData);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve feedback' });
-  }
+  res.json(feedbackData);
 });
 
 // For Vercel serverless: Export the app
