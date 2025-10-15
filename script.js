@@ -1,7 +1,4 @@
-// Simulated environment variable (in a real app, this would come from a secure source)
-const ENV = {
-  ACTIVATION_KEY: 'K2JNR-XMD8C-M3QCC-CR8F2-P9XTY'
-};
+import { ACTIVATION_KEY } from './env.js';
 
 // Utility: format two digits
 function two(n) {
@@ -89,7 +86,7 @@ function checkPasswordNow() {
   
   const now = getHHMM();
   if (pwInput.value === now) {
-    const token = ENV.ACTIVATION_KEY; // Use simulated env variable
+    const token = ACTIVATION_KEY; // Use key from env.js
     const keyElement = document.createElement('div');
     keyElement.className = 'key';
     keyElement.textContent = token; // Display key in plain text
