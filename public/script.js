@@ -148,3 +148,21 @@ activateBtn.addEventListener('click', () => {
   activateBtn.disabled = true;
   activateBtn.textContent = 'Activated';
 });
+
+// Copy text functionality for new paragraphs
+document.querySelectorAll('.copy-text').forEach(element => {
+  element.addEventListener('click', () => {
+    const text = element.getAttribute('data-text');
+    navigator.clipboard.writeText(text).then(() => {
+      const notification = document.createElement('div');
+      notification.className = 'success';
+      notification.textContent = 'Copied!';
+      notification.style.position = 'absolute';
+      notification.style.marginTop = '10px';
+      element.appendChild(notification);
+      setTimeout(() => notification.remove(), 2000);
+    }).catch(() => {
+      alert('Unable to copy — permission denied.');
+    });
+  });
+});
