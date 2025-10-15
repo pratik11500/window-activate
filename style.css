@@ -67,6 +67,7 @@ p.lead {
   gap: 18px;
   margin-top: 18px;
   justify-content: center;
+  height: 500px;
 }
 .grid section {
   flex: 1;
@@ -145,6 +146,10 @@ button {
   border: 1px solid rgba(255,255,255,0.02);
   flex: 1;
   min-width: 200px;
+  cursor: pointer;
+}
+.key:hover {
+  background: rgba(255,255,255,0.05);
 }
 .success {
   color: #8ef3b3;
@@ -185,8 +190,8 @@ footer {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #3f3f3f;
-  color: #eab308;
+  background: var(--glass);
+  color: var(--accent);
   padding: 8px 16px;
   border-radius: 9999px;
   text-decoration: none;
@@ -196,7 +201,7 @@ footer {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .creator-toggle:hover {
-  background: #4b4b4b;
+  background: rgba(255,255,255,0.05);
   transform: translateY(-2px);
 }
 .creator-toggle img {
@@ -213,6 +218,7 @@ footer {
   .grid {
     flex-direction: column;
     gap: 24px;
+    height: auto;
   }
   .partition {
     display: none;
