@@ -112,7 +112,7 @@ textarea {
   margin: 0 auto;
   display: block;
 }
-button {
+a {
   cursor: pointer;
   border: 0;
   padding: 10px 14px;
