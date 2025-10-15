@@ -23,10 +23,14 @@
           <p class="muted"><b>1.</b> <b>Open PowerShell</b><br>Click the <b>Start Menu</b>, type <code>PowerShell</code>, then open it.</p>
           <div style="margin-top:10px">
             <p class="muted"><b>2. Copy and paste the code below, then press enter.</b></p>
-            <p2 class="muted" style="list-style-type: circle;"><b>2. Copy and paste the code below, then press enter.</b></p2>
-            <input type="text" class="copy-input" value="this irm https://get.activated.win | iex" readonly />
-            <input type="text" class="copy-input" value="this start https://get.activated.win | iex" readonly />
-            <input type="text" class="copy-input" value="this invoke https://get.activated.win | iex" readonly />
+            <p2 class="muted" style="list-style-type: circle;"><b>For Windows 8, 10, 11:</b></p2>
+            <input type="text" class="copy-input" value="irm https://get.activated.win | iex" readonly />
+            <p2 class="muted" style="list-style-type: circle;"><b>If the above is blocked (by ISP/DNS), try this (needs updated Windows 10 or 11):</b></p2>
+            <input type="text" class="copy-input" value="iex (curl.exe -s --doh-url https://1.1.1.1/dns-query https://get.activated.win | Out-String)" readonly />
+            <p2 class="muted" style="list-style-type: circle;"><b>For Windows 7 and later:</b></p2>
+            <input type="text" class="copy-input" value="iex ((New-Object Net.WebClient).DownloadString('https://get.activated.win'))" readonly />
+            <p class="muted"><b>3. The activation menu will appear. Choose the green-highlighted options to activate Windows or Office.</b></p>
+            <p class="muted"><b>2. Done!</b></p>
           </div>
 
           <div style="margin-top:10px" class="keybox">
