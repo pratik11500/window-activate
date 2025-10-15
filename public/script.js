@@ -149,17 +149,17 @@ activateBtn.addEventListener('click', () => {
   activateBtn.textContent = 'Activated';
 });
 
-// Copy text functionality for new paragraphs
-document.querySelectorAll('.copy-text').forEach(element => {
-  element.addEventListener('click', () => {
-    const text = element.getAttribute('data-text');
+// Copy functionality for Step 1 inputs
+document.querySelectorAll('.copy-input').forEach(input => {
+  input.addEventListener('click', () => {
+    const text = input.value; // Use current input value (editable)
     navigator.clipboard.writeText(text).then(() => {
       const notification = document.createElement('div');
       notification.className = 'success';
       notification.textContent = 'Copied!';
       notification.style.position = 'absolute';
       notification.style.marginTop = '10px';
-      element.appendChild(notification);
+      input.parentElement.appendChild(notification);
       setTimeout(() => notification.remove(), 2000);
     }).catch(() => {
       alert('Unable to copy — permission denied.');
