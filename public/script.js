@@ -3,7 +3,6 @@ let pwInput = document.getElementById('pw');
 const pwMsg = document.getElementById('pwMsg');
 const activateBtn = document.getElementById('activateBtn');
 const pwContainer = document.getElementById('pwContainer');
-const resetBtn = document.getElementById('resetBtn');
 
 // Feedback
 const fbWorking = document.getElementById('fbWorking');
@@ -51,14 +50,30 @@ updateCounts();
   });
 });
 
-sendFb.addEventListener('click', () => {
+sendFb.addEventListener('click', async () => {
   const note = comments.value.trim();
   if (!note) {
     alert('Please write a short comment before sending (demo).');
     return;
   }
-  comments.value = '';
-  alert('Feedback saved locally (demo).');
+
+  try {
+    const response = await fetch('/send-feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ comment: note })
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      comments.value = '';
+      alert('Feedback saved successfully (demo).');
+    } else {
+      alert(`Failed to save feedback: ${data.error}`);
+    }
+  } catch (error) {
+    alert('Error sending feedback to server');
+  }
 });
 
 clearFb.addEventListener('click', () => {
@@ -132,29 +147,4 @@ activateBtn.addEventListener('click', () => {
   actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
   activateBtn.disabled = true;
   activateBtn.textContent = 'Activated';
-});
-
-// Reset
-resetBtn.addEventListener('click', () => {
-  if (confirm('Reset session?')) {
-    activateBtn.disabled = true;
-    activateBtn.textContent = 'Activate';
-    pwContainer.innerHTML = `
-      <label for="pw">Password</label>
-      <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwHelp" />
-      <div id="pwHelp" class="muted" style="margin-top:8px">Enter the password '1234' to reveal the key.</div>
-      <div id="pwMsg" style="margin-top:8px" aria-live="polite"></div>
-    `;
-    pwInput = document.getElementById('pw');
-    pwMsg.innerHTML = '';
-    actMsg.innerHTML = '';
-    
-    // Re-attach event listeners
-    pwInput.addEventListener('input', checkPasswordNow);
-    pwInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        checkPasswordNow();
-      }
-    });
-  }
 });
