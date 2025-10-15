@@ -20,11 +20,15 @@ app.use(express.json());
 // API endpoint to validate password and return key
 app.post('/get-key', (req, res) => {
   const { password } = req.body;
-  
+  console.log('Received password:', password); // Log received password
+  console.log('Expected password:', process.env.PASSWORD); // Log expected password
+
   // Validate against fixed password from .env
   if (password === process.env.PASSWORD) {
+    console.log('Password match, returning key:', process.env.ACTIVATION_KEY);
     res.json({ key: process.env.ACTIVATION_KEY });
   } else {
+    console.log('Password mismatch');
     res.status(401).json({ error: 'Incorrect password' });
   }
 });
