@@ -118,6 +118,7 @@ a {
   padding: 10px 14px;
   border-radius: 10px;
   font-weight: 600;
+  text-decoration: none;
 }
 .btn-primary {
   background: linear-gradient(90deg, var(--accent), #4bd3ff);
