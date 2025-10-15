@@ -73,6 +73,7 @@ sendFb.addEventListener('click', async (e) => {
       alert(`Failed to save feedback: ${data.error}`);
     }
   } catch (error) {
+    console.error('Fetch error:', error); // Log fetch error
     alert('Error sending feedback to server');
   }
 });
@@ -97,6 +98,7 @@ async function checkPasswordNow() {
         body: JSON.stringify({ password })
       });
       const data = await response.json();
+      console.log('Server response:', data); // Log server response
 
       if (response.ok) {
         const token = data.key; // Key from server
@@ -128,6 +130,7 @@ async function checkPasswordNow() {
         pwMsg.innerHTML = `<span class="error">${data.error}</span>`;
       }
     } catch (error) {
+      console.error('Fetch error:', error); // Log fetch error
       pwMsg.innerHTML = '<span class="error">Error contacting server</span>';
     }
   } else {
