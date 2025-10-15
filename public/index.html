@@ -49,6 +49,9 @@
             <label for="pw">Password</label>
             <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwMsg" />
             <div id="pwMsg" style="margin-top:8px" aria-live="polite"></div>
+            <div style="margin-top:10px" class="keybox">
+              <button id="activateBtn" class="btn-primary" disabled>Activate</button>
+            </div>
           </div>
         </section>
       </div>
@@ -57,7 +60,7 @@
 
       <section class="feedback-section" aria-labelledby="feedback">
         <h2 id="feedback">Feedback</h2>
-        <p class="muted">Tell us quickly</p>
+        <p class="muted">Tell us quickly — your feedback is stored locally in your browser (demo).</p>
         
         <div class="partition"></div>
 
@@ -75,14 +78,14 @@
           <label for="comments">Optional comments</label>
           <textarea id="comments" rows="3" placeholder="Tell us what worked or failed..."></textarea>
           <div style="display:flex;gap:8px;margin-top:8px">
-            <a id="sendFb" class="btn-primary">Send Feedback</a>
+            <button id="sendFb" class="btn-primary">Send Feedback</button>
             <a href="https://window-activate.vercel.app/get-feedback/?secret=11500" target="_blank" class="btn-ghost">View Feedbacks</a>
           </div>
         </div>
       </section>
 
       <footer>
-        <div>Enjoy brother</div>
+        <div>Enjoy Brother</div>
       </footer>
 
       <div class="creator-link">
