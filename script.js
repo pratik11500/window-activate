@@ -9,13 +9,11 @@ function getHHMM() {
 }
 
 // Elements
-const pwInput = document.getElementById('pw');
+let pwInput = document.getElementById('pw');
 const pwMsg = document.getElementById('pwMsg');
 const demoKeyEl = document.getElementById('demoKey');
 const activateBtn = document.getElementById('activateBtn');
 const actMsg = document.getElementById('actMsg');
-const demoInfo = document.getElementById('demoInfo');
-const historyEl = document.getElementById('history');
 const pwContainer = document.getElementById('pwContainer');
 
 // Feedback
@@ -27,10 +25,10 @@ const countsEl = document.getElementById('counts');
 const comments = document.getElementById('comments');
 const sendFb = document.getElementById('sendFb');
 const clearFb = document.getElementById('clearFb');
+const resetBtn = document.getElementById('resetBtn');
 
 // Local storage keys
 const LS_FEED = 'demo_activation_feedback_v1';
-const LS_HISTORY = 'demo_activation_history_v1';
 
 function loadFeedback() {
   try {
@@ -71,50 +69,29 @@ sendFb.addEventListener('click', () => {
     alert('Please write a short comment before sending (demo).');
     return;
   }
-  const hist = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
-  hist.push({ type: 'feedback', text: note, time: new Date().toISOString() });
-  localStorage.setItem(LS_HISTORY, JSON.stringify(hist));
   comments.value = '';
   alert('Feedback saved locally (demo).');
-  renderHistory();
 });
 
 clearFb.addEventListener('click', () => {
-  if (confirm('Clear local feedback and history? This only affects this browser.')) {
+  if (confirm('Clear local feedback? This only affects this browser.')) {
     localStorage.removeItem(LS_FEED);
-    localStorage.removeItem(LS_HISTORY);
     updateCounts();
-    renderHistory();
   }
 });
 
-function renderHistory() {
-  const hist = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
-  if (hist.length === 0) {
-    historyEl.textContent = '—';
-    return;
-  }
-  historyEl.innerHTML = hist.slice(-10).reverse().map(h => {
-    const t = new Date(h.time).toLocaleString();
-    return `<div style="margin-bottom:8px"><strong>${h.type}</strong> <div class='muted' style='font-size:13px'>${h.text}</div><div class='muted' style='font-size:12px'>${t}</div></div>`;
-  }).join('');
-}
-renderHistory();
-
 // Password checking: reveal key and hide input on correct password
 function checkPasswordNow() {
+  if (!pwInput) return;
+  
   const now = getHHMM();
   if (pwInput.value === now) {
     const token = makeDemoKey();
     pwContainer.innerHTML = `<div class="key">${token}</div>`;
-    demoInfo.textContent = `Key revealed at ${new Date().toLocaleString()}`;
     demoKeyEl.textContent = token;
     activateBtn.disabled = false;
-    actMsg.innerHTML = '<span class="muted">Key revealed — ready for activation.</span>';
-    const hist = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
-    hist.push({ type: 'reveal', text: `key ${token} revealed`, time: new Date().toISOString() });
-    localStorage.setItem(LS_HISTORY, JSON.stringify(hist));
-    renderHistory();
+    actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
+    pwInput = null; // Prevent further checks
   } else {
     if (pwInput.value.length >= 1) {
       pwMsg.innerHTML = '<span class="error">Password incorrect</span>';
@@ -124,7 +101,14 @@ function checkPasswordNow() {
   }
 }
 
-pwInput.addEventListener('input', checkPasswordNow);
+if (pwInput) {
+  pwInput.addEventListener('input', checkPasswordNow);
+  pwInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      checkPasswordNow();
+    }
+  });
+}
 
 // Reveal demo key
 function makeDemoKey() {
@@ -139,21 +123,17 @@ activateBtn.addEventListener('click', () => {
     actMsg.innerHTML = '<span class="error">No key — reveal one first.</span>';
     return;
   }
-  const tx = { type: 'activate', text: `activated key ${key}`, time: new Date().toISOString() };
-  const hist = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
-  hist.push(tx);
-  localStorage.setItem(LS_HISTORY, JSON.stringify(hist));
-  renderHistory();
   actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
   activateBtn.disabled = true;
+  activateBtn.textContent = 'Activated';
 });
 
 // Reset
-const resetBtn = document.getElementById('resetBtn');
 resetBtn.addEventListener('click', () => {
   if (confirm('Reset session?')) {
     demoKeyEl.textContent = '•••••••••••••••';
     activateBtn.disabled = true;
+    activateBtn.textContent = 'Activate';
     pwContainer.innerHTML = `
       <label for="pw">Password</label>
       <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwHelp" />
@@ -163,21 +143,13 @@ resetBtn.addEventListener('click', () => {
     pwInput = document.getElementById('pw');
     pwMsg.innerHTML = '';
     actMsg.innerHTML = '';
-    demoInfo.textContent = 'No key revealed yet.';
+    
+    // Re-attach event listeners
     pwInput.addEventListener('input', checkPasswordNow);
+    pwInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkPasswordNow();
+      }
+    });
   }
 });
-
-// Accessibility: allow Enter to check password
-pwInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    checkPasswordNow();
-  }
-});
-
-// Periodically revalidate password
-setInterval(() => {
-  if (pwInput) {
-    checkPasswordNow();
-  }
-}, 10000);
