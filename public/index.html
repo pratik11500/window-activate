@@ -25,6 +25,7 @@
           <div style="margin-top:10px" class="keybox">
             <button id="activateBtn" class="btn-primary" disabled>Activate</button>
             <button id="resetBtn" class="btn-ghost">Reset</button>
+            <a href="https://www.google.com" class="btn-ghost" target="_blank">Taken from</a>
           </div>
 
           <div id="actMsg" style="margin-top:8px"></div>
@@ -37,8 +38,7 @@
           <p>Write correct password to get Windows key</p>
           <div style="margin-top:12px" id="pwContainer">
             <label for="pw">Password</label>
-            <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwHelp" />
-            <div id="pwHelp" class="muted" style="margin-top:8px">Enter the password '1234' to reveal the key.</div>
+            <input id="pw" type="password" inputmode="numeric" placeholder="Enter password" aria-describedby="pwMsg" />
             <div id="pwMsg" style="margin-top:8px" aria-live="polite"></div>
           </div>
         </section>
