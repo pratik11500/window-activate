@@ -1,5 +1,3 @@
-import { ACTIVATION_KEY } from './env.js';
-
 // Utility: format two digits
 function two(n) {
   return String(n).padStart(2, '0');
@@ -80,43 +78,54 @@ clearFb.addEventListener('click', () => {
   }
 });
 
-// Password checking: reveal key and hide input on correct password
-function checkPasswordNow() {
+// Password checking: fetch key from server
+async function checkPasswordNow() {
   if (!pwInput) return;
-  
-  const now = getHHMM();
-  if (pwInput.value === now) {
-    const token = ACTIVATION_KEY; // Use key from env.js
-    const keyElement = document.createElement('div');
-    keyElement.className = 'key';
-    keyElement.textContent = token; // Display key in plain text
-    keyElement.title = 'Click to copy key';
-    pwContainer.innerHTML = '';
-    pwContainer.appendChild(keyElement);
-    activateBtn.disabled = false;
-    actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
-    pwInput = null;
 
-    // Copy functionality
-    keyElement.addEventListener('click', () => {
-      navigator.clipboard.writeText(token).then(() => {
-        const notification = document.createElement('div');
-        notification.className = 'success';
-        notification.textContent = 'Copied!';
-        notification.style.position = 'absolute';
-        notification.style.marginTop = '10px';
-        keyElement.appendChild(notification);
-        setTimeout(() => notification.remove(), 2000);
-      }).catch(() => {
-        alert('Unable to copy — permission denied.');
+  const password = pwInput.value;
+  if (password.length >= 1) {
+    try {
+      const response = await fetch('/get-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
       });
-    });
-  } else {
-    if (pwInput.value.length >= 1) {
-      pwMsg.innerHTML = '<span class="error">Password incorrect</span>';
-    } else {
-      pwMsg.innerHTML = '';
+      const data = await response.json();
+
+      if (response.ok) {
+        const token = data.key; // Key from server
+        const keyElement = document.createElement('div');
+        keyElement.className = 'key';
+        keyElement.textContent = token; // Display key in plain text
+        keyElement.title = 'Click to copy key';
+        pwContainer.innerHTML = '';
+        pwContainer.appendChild(keyElement);
+        activateBtn.disabled = false;
+        actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
+        pwInput = null;
+
+        // Copy functionality
+        keyElement.addEventListener('click', () => {
+          navigator.clipboard.writeText(token).then(() => {
+            const notification = document.createElement('div');
+            notification.className = 'success';
+            notification.textContent = 'Copied!';
+            notification.style.position = 'absolute';
+            notification.style.marginTop = '10px';
+            keyElement.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+          }).catch(() => {
+            alert('Unable to copy — permission denied.');
+          });
+        });
+      } else {
+        pwMsg.innerHTML = `<span class="error">${data.error}</span>`;
+      }
+    } catch (error) {
+      pwMsg.innerHTML = '<span class="error">Error contacting server</span>';
     }
+  } else {
+    pwMsg.innerHTML = '';
   }
 }
 
