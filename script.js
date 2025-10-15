@@ -11,10 +11,9 @@ function getHHMM() {
 // Elements
 let pwInput = document.getElementById('pw');
 const pwMsg = document.getElementById('pwMsg');
-const demoKeyEl = document.getElementById('demoKey');
 const activateBtn = document.getElementById('activateBtn');
-const actMsg = document.getElementById('actMsg');
 const pwContainer = document.getElementById('pwContainer');
+const resetBtn = document.getElementById('resetBtn');
 
 // Feedback
 const fbWorking = document.getElementById('fbWorking');
@@ -25,7 +24,6 @@ const countsEl = document.getElementById('counts');
 const comments = document.getElementById('comments');
 const sendFb = document.getElementById('sendFb');
 const clearFb = document.getElementById('clearFb');
-const resetBtn = document.getElementById('resetBtn');
 
 // Local storage keys
 const LS_FEED = 'demo_activation_feedback_v1';
@@ -87,11 +85,31 @@ function checkPasswordNow() {
   const now = getHHMM();
   if (pwInput.value === now) {
     const token = makeDemoKey();
-    pwContainer.innerHTML = `<div class="key">${token}</div>`;
-    demoKeyEl.textContent = token;
+    const keyElement = document.createElement('div');
+    keyElement.className = 'key';
+    keyElement.dataset.key = token; // Store key in data attribute
+    keyElement.textContent = '••••-••••-••••-••••'; // Masked display
+    keyElement.title = 'Click to copy key';
+    pwContainer.innerHTML = '';
+    pwContainer.appendChild(keyElement);
     activateBtn.disabled = false;
     actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
-    pwInput = null; // Prevent further checks
+    pwInput = null;
+
+    // Add click to copy functionality
+    keyElement.addEventListener('click', () => {
+      navigator.clipboard.writeText(token).then(() => {
+        const notification = document.createElement('div');
+        notification.className = 'success';
+        notification.textContent = 'Copied!';
+        notification.style.position = 'absolute';
+        notification.style.marginTop = '10px';
+        keyElement.appendChild(notification);
+        setTimeout(() => notification.remove(), 2000);
+      }).catch(() => {
+        alert('Unable to copy — permission denied.');
+      });
+    });
   } else {
     if (pwInput.value.length >= 1) {
       pwMsg.innerHTML = '<span class="error">Password incorrect</span>';
@@ -110,7 +128,7 @@ if (pwInput) {
   });
 }
 
-// Reveal demo key
+// Generate demo key
 function makeDemoKey() {
   const arr = new Uint8Array(8);
   crypto.getRandomValues(arr);
@@ -118,11 +136,6 @@ function makeDemoKey() {
 }
 
 activateBtn.addEventListener('click', () => {
-  const key = demoKeyEl.textContent;
-  if (!key || key.startsWith('•')) {
-    actMsg.innerHTML = '<span class="error">No key — reveal one first.</span>';
-    return;
-  }
   actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
   activateBtn.disabled = true;
   activateBtn.textContent = 'Activated';
@@ -131,7 +144,6 @@ activateBtn.addEventListener('click', () => {
 // Reset
 resetBtn.addEventListener('click', () => {
   if (confirm('Reset session?')) {
-    demoKeyEl.textContent = '•••••••••••••••';
     activateBtn.disabled = true;
     activateBtn.textContent = 'Activate';
     pwContainer.innerHTML = `
