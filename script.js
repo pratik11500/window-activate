@@ -108,7 +108,7 @@ function checkPasswordNow() {
     const token = makeDemoKey();
     pwContainer.innerHTML = `<div class="key">${token}</div>`;
     demoInfo.textContent = `Key revealed at ${new Date().toLocaleString()}`;
-    demoKeyEl.textDoeKeyEl.textContent = token;
+    demoKeyEl.textContent = token;
     activateBtn.disabled = false;
     actMsg.innerHTML = '<span class="muted">Key revealed — ready for activation.</span>';
     const hist = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
