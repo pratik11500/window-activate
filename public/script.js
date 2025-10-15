@@ -50,7 +50,8 @@ updateCounts();
   });
 });
 
-sendFb.addEventListener('click', async () => {
+sendFb.addEventListener('click', async (e) => {
+  e.preventDefault(); // Prevent default anchor behavior
   const note = comments.value.trim();
   if (!note) {
     alert('Please write a short comment before sending (demo).');
@@ -149,7 +150,7 @@ activateBtn.addEventListener('click', () => {
   activateBtn.textContent = 'Activated';
 });
 
-// Copy functionality for Step 1 inputs (no notification)
+// Copy functionality for Method 1 inputs (no notification)
 document.querySelectorAll('.copy-input').forEach(input => {
   input.addEventListener('click', () => {
     const text = input.value; // Use current input value
