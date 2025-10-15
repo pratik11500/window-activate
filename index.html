@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Windows Activation</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="wrap">
@@ -18,7 +18,7 @@
       </header>
 
       <div class="grid">
-        <section class="panel" aria-labelledby="step1">
+        <section aria-labelledby="step1">
           <h2 id="step1">Step 1 — Demo activation</h2>
           <p class="muted">After revealing a key, you can "Activate" — this only simulates the flow and saves a record locally.</p>
 
@@ -29,30 +29,9 @@
           </div>
 
           <div id="actMsg" style="margin-top:8px"></div>
-
-          <hr style="margin:16px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
-
-          <h3>Feedback</h3>
-          <p class="muted">Tell us quickly — your feedback is stored locally in your browser (demo).</p>
-          <div class="feedback">
-            <button class="fb-btn" id="fbWorking">Is this working?</button>
-            <button class="fb-btn" id="fbSatisfy">Satisfy</button>
-            <button class="fb-btn" id="fbLike">Like</button>
-            <button class="fb-btn" id="fbDilkie">Dilkie</button>
-          </div>
-          <div style="margin-top:10px" class="muted">Counts: <span id="counts">—</span></div>
-
-          <div style="margin-top:10px">
-            <label for="comments">Optional comments</label>
-            <textarea id="comments" rows="3" placeholder="Tell us what worked or failed..."></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <button id="sendFb" class="btn-primary">Send Feedback</button>
-              <button id="clearFb" class="btn-ghost">Clear Local Feedback</button>
-            </div>
-          </div>
         </section>
 
-        <section class="panel" aria-labelledby="step2">
+        <section aria-labelledby="step2">
           <h2 id="step2">Step 2 — Enter password</h2>
           <p>Write correct password to get Windows key</p>
           <div style="margin-top:12px" id="pwContainer">
@@ -62,27 +41,48 @@
             <div id="pwMsg" style="margin-top:8px" aria-live="polite"></div>
           </div>
         </section>
-
-        <aside class="panel" aria-labelledby="status">
-          <h2 id="status">Status & Logs</h2>
-          <p class="muted">Live info and demo logs (kept locally only).</p>
-
-          <div style="margin-top:12px">
-            <div><strong>Demo Key</strong></div>
-            <div class="muted" id="demoInfo">No key revealed yet.</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <div><strong>Activation History</strong></div>
-            <div id="history" class="muted" style="margin-top:8px">—</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <div><strong>Notes</strong></div>
-            <div class="muted" style="margin-top:8px">This page is a <strong>UI demo</strong>. It intentionally does not connect to any Microsoft or Windows activation service and does not generate valid product keys.</div>
-          </div>
-        </aside>
       </div>
+
+      <section class="feedback-section" aria-labelledby="feedback">
+        <h2 id="feedback">Feedback</h2>
+        <p class="muted">Tell us quickly — your feedback is stored locally in your browser (demo).</p>
+        <div class="feedback">
+          <button class="fb-btn" id="fbWorking">Is this working?</button>
+          <button class="fb-btn" id="fbSatisfy">Satisfy</button>
+          <button class="fb-btn" id="fbLike">Like</button>
+          <button class="fb-btn" id="fbDilkie">Dilkie</button>
+        </div>
+        <div style="margin-top:10px" class="muted">Counts: <span id="counts">—</span></div>
+
+        <div style="margin-top:10px">
+          <label for="comments">Optional comments</label>
+          <textarea id="comments" rows="3" placeholder="Tell us what worked or failed..."></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button id="sendFb" class="btn-primary">Send Feedback</button>
+            <button id="clearFb" class="btn-ghost">Clear Local Feedback</button>
+          </div>
+        </div>
+      </section>
+
+      <aside aria-labelledby="status">
+        <h2 id="status">Status & Logs</h2>
+        <p class="muted">Live info and demo logs (kept locally only).</p>
+
+        <div style="margin-top:12px">
+          <div><strong>Demo Key</strong></div>
+          <div class="muted" id="demoInfo">No key revealed yet.</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div><strong>Activation History</strong></div>
+          <div id="history" class="muted" style="margin-top:8px">—</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div><strong>Notes</strong></div>
+          <div class="muted" style="margin-top:8px">This page is a <strong>UI demo</strong>. It intentionally does not connect to any Microsoft or Windows activation service and does not generate valid product keys.</div>
+        </div>
+      </aside>
 
       <footer>
         <div>Made for UI prototyping. If you need a secure enterprise activation portal integrated with Microsoft services, mention that and I can guide you on legitimate APIs and licensing workflows.</div>
