@@ -1,7 +1,7 @@
 // Elements
 let pwInput = document.getElementById('pw');
 const pwMsg = document.getElementById('pwMsg');
-const activateBtn = document.getElementById('activateBtn');
+let activateBtn = document.getElementById('activateBtn'); // Initialize as let
 const pwContainer = document.getElementById('pwContainer');
 
 // Feedback
@@ -38,16 +38,18 @@ updateCounts();
 
 // Feedback buttons
 [fbWorking, fbSatisfy, fbLike, fbDilkie].forEach(btn => {
-  btn.addEventListener('click', () => {
-    const f = loadFeedback();
-    if (btn === fbWorking) f.working++;
-    if (btn === fbSatisfy) f.satisfy++;
-    if (btn === fbLike) f.like++;
-    if (btn === fbDilkie) f.dilkie++;
-    saveFeedback(f);
-    updateCounts();
-    btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(0.96)' }, { transform: 'scale(1)' }], { duration: 180 });
-  });
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const f = loadFeedback();
+      if (btn === fbWorking) f.working++;
+      if (btn === fbSatisfy) f.satisfy++;
+      if (btn === fbLike) f.like++;
+      if (btn === fbDilkie) f.dilkie++;
+      saveFeedback(f);
+      updateCounts();
+      btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(0.96)' }, { transform: 'scale(1)' }], { duration: 180 });
+    });
+  }
 });
 
 sendFb.addEventListener('click', async (e) => {
@@ -87,7 +89,10 @@ clearFb.addEventListener('click', () => {
 
 // Password checking: fetch key from server
 async function checkPasswordNow() {
-  if (!pwInput) return;
+  if (!pwInput) {
+    console.error('pwInput is null');
+    return;
+  }
 
   const password = pwInput.value;
   if (password.length >= 1) {
@@ -108,9 +113,9 @@ async function checkPasswordNow() {
         keyElement.title = 'Click to copy key';
         pwContainer.innerHTML = '';
         pwContainer.appendChild(keyElement);
-        activateBtn.disabled = false;
+        activateBtn.disabled = false; // Enable activate button
         actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
-        pwInput = null;
+        pwInput = null; // Disable further input changes
 
         // Copy functionality
         keyElement.addEventListener('click', () => {
@@ -126,6 +131,12 @@ async function checkPasswordNow() {
             alert('Unable to copy — permission denied.');
           });
         });
+
+        // Reinitialize activateBtn in case it was null initially
+        activateBtn = document.getElementById('activateBtn');
+        if (activateBtn) {
+          activateBtn.disabled = false;
+        }
       } else {
         pwMsg.innerHTML = `<span class="error">${data.error}</span>`;
       }
@@ -145,20 +156,29 @@ if (pwInput) {
       checkPasswordNow();
     }
   });
+} else {
+  console.error('pwInput not found in DOM');
 }
 
-activateBtn.addEventListener('click', () => {
-  actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
-  activateBtn.disabled = true;
-  activateBtn.textContent = 'Activated';
-});
+// Activate button event (handle if null)
+if (activateBtn) {
+  activateBtn.addEventListener('click', () => {
+    actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
+    activateBtn.disabled = true;
+    activateBtn.textContent = 'Activated';
+  });
+} else {
+  console.error('activateBtn not found in DOM');
+}
 
 // Copy functionality for Method 1 inputs (no notification)
 document.querySelectorAll('.copy-input').forEach(input => {
-  input.addEventListener('click', () => {
-    const text = input.value; // Use current input value
-    navigator.clipboard.writeText(text).catch(() => {
-      alert('Unable to copy — permission denied.');
+  if (input) {
+    input.addEventListener('click', () => {
+      const text = input.value; // Use current input value
+      navigator.clipboard.writeText(text).catch(() => {
+        alert('Unable to copy — permission denied.');
+      });
     });
-  });
+  }
 });
