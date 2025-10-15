@@ -149,19 +149,11 @@ activateBtn.addEventListener('click', () => {
   activateBtn.textContent = 'Activated';
 });
 
-// Copy functionality for Step 1 inputs
+// Copy functionality for Step 1 inputs (no notification)
 document.querySelectorAll('.copy-input').forEach(input => {
   input.addEventListener('click', () => {
-    const text = input.value; // Use current input value (editable)
-    navigator.clipboard.writeText(text).then(() => {
-      const notification = document.createElement('div');
-      notification.className = 'success';
-      notification.textContent = 'Copied!';
-      notification.style.position = 'absolute';
-      notification.style.marginTop = '10px';
-      input.parentElement.appendChild(notification);
-      setTimeout(() => notification.remove(), 2000);
-    }).catch(() => {
+    const text = input.value; // Use current input value
+    navigator.clipboard.writeText(text).catch(() => {
       alert('Unable to copy — permission denied.');
     });
   });
