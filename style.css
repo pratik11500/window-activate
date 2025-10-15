@@ -190,7 +190,7 @@ footer {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--glass);
+  background: var(--panel);
   color: var(--accent);
   padding: 8px 16px;
   border-radius: 9999px;
