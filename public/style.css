@@ -243,12 +243,9 @@ footer {
     transform: translateX(-50%);
   }
   .creator-toggle {
-        bottom: 8px;
-        left: 8px;
-        width: calc(60% - 16px);
+        margin-left: 135px;
         padding: 6px 12px;
         font-size: 0.8rem;
-        position: fixed;
     }
     
     .creator-toggle img {
