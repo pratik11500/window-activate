@@ -19,9 +19,19 @@ app.use(express.json());
 
 // API endpoint to validate password and return key
 app.post('/get-key', (req, res) => {
-  const { password } = req.body;
+  if (!process.env.PASSWORD || !process.env.ACTIVATION_KEY) {
+    console.error('Missing required environment variables');
+    return res.status(500).json({ error: 'Server configuration error' });
+  }
+
+  const password = req.body.password?.trim() ?? '';
   console.log('Received password:', password); // Log received password
   console.log('Expected password:', process.env.PASSWORD); // Log expected password
+
+  if (!password) {
+    console.log('No password provided');
+    return res.status(400).json({ error: 'Password required' });
+  }
 
   // Validate against fixed password from .env
   if (password === process.env.PASSWORD) {
