@@ -56,7 +56,7 @@ sendFb.addEventListener('click', async (e) => {
   e.preventDefault(); // Prevent default anchor behavior
   const note = comments.value.trim();
   if (!note) {
-    alert('Please write a short comment before sending (demo).');
+    alert('Please write a short comment before sending.');
     return;
   }
 
@@ -70,7 +70,7 @@ sendFb.addEventListener('click', async (e) => {
 
     if (response.ok) {
       comments.value = '';
-      alert('Feedback saved successfully (demo).');
+      alert('Feedback saved successfully.');
     } else {
       alert(`Failed to save feedback: ${data.error}`);
     }
