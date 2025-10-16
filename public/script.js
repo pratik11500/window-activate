@@ -80,7 +80,7 @@ sendFb.addEventListener('click', async (e) => {
   }
 });
 
-clearFb.addEventListener('click', () => {
+clearFb?.addEventListener('click', () => {
   if (confirm('Clear local feedback? This only affects this browser.')) {
     localStorage.removeItem(LS_FEED);
     updateCounts();
@@ -94,7 +94,7 @@ async function checkPasswordNow() {
     return;
   }
 
-  const password = pwInput.value;
+  const password = pwInput.value.trim();
   if (password.length >= 1) {
     try {
       const response = await fetch('/get-key', {
@@ -106,16 +106,26 @@ async function checkPasswordNow() {
       console.log('Server response:', data); // Log server response
 
       if (response.ok) {
-        const token = data.key; // Key from server
+        const token = data.key;
+        if (!token) {
+          pwMsg.innerHTML = '<span class="error">No key provided by server.</span>';
+          return;
+        }
         const keyElement = document.createElement('div');
         keyElement.className = 'key';
         keyElement.textContent = token; // Display key in plain text
         keyElement.title = 'Click to copy key';
-        pwContainer.innerHTML = '';
-        pwContainer.appendChild(keyElement);
-        activateBtn.disabled = false; // Enable activate button
-        actMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
+
+        // Remove label
+        const label = pwContainer.querySelector('label[for="pw"]');
+        if (label) label.remove();
+
+        // Replace input with key element
+        pwInput.replaceWith(keyElement);
+
+        pwMsg.innerHTML = '<span class="success">Key revealed — ready for activation.</span>';
         pwInput = null; // Disable further input changes
+        activateBtn.disabled = false;
 
         // Copy functionality
         keyElement.addEventListener('click', () => {
@@ -131,12 +141,6 @@ async function checkPasswordNow() {
             alert('Unable to copy — permission denied.');
           });
         });
-
-        // Reinitialize activateBtn in case it was null initially
-        activateBtn = document.getElementById('activateBtn');
-        if (activateBtn) {
-          activateBtn.disabled = false;
-        }
       } else {
         pwMsg.innerHTML = `<span class="error">${data.error}</span>`;
       }
@@ -163,7 +167,7 @@ if (pwInput) {
 // Activate button event (handle if null)
 if (activateBtn) {
   activateBtn.addEventListener('click', () => {
-    actMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
+    pwMsg.innerHTML = '<span class="success">Activation simulated & saved locally.</span>';
     activateBtn.disabled = true;
     activateBtn.textContent = 'Activated';
   });
